@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.yes.glowpick.ui.home.HomeViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="24dp">
+
+        <TextView
+            android:id="@+id/error_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/grey"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/retry_button"
+            app:errorMessage="@{viewModel.frontMessage}"
+            tool:text="오류가 발생했습니다" />
+
+        <Button
+            android:id="@+id/retry_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="?colorPrimary"
+            android:text="@string/retry"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/error_message"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:onClick="@{() -> viewModel.clickRetryButton()}"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
