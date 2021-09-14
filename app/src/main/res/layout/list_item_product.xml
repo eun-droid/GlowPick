@@ -7,11 +7,16 @@
         <variable
             name="product"
             type="com.yes.glowpick.model.Product" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{clickListener}"
         android:padding="24dp">
 
         <ImageView

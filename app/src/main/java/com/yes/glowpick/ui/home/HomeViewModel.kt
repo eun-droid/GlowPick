@@ -35,13 +35,26 @@ class HomeViewModel : ViewModel() {
     private val glowPickAPI = GlowPickAPI.create()
     private var currentPageNumber = 1   // 제품 페이지 번호는 1부터 시작
 
+    init {
+        getProductList()
+    }
+
     fun getProductList() {
         glowPickAPI.getProducts(currentPageNumber).enqueue(object : Callback<ProductResponse> {
             override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
                 _dataLoading.value = false
 
                 if (response.isSuccessful) {
-                    _products.value = response.body()?.products
+                    response.body()?.products?.let {
+                        if (_products.value == null) {
+                            _products.value = it
+                        } else {
+                            _products.value?.let { existingList ->
+                                existingList.addAll(it)
+                                _products.value = existingList
+                            }
+                        }
+                    }
                     currentPageNumber++
                 } else {
                     error(response.message() ?: "")

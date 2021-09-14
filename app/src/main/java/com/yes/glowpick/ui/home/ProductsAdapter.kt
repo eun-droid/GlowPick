@@ -2,8 +2,12 @@ package com.yes.glowpick.ui.home
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.yes.glowpick.R
 import com.yes.glowpick.databinding.ListItemLoadingBinding
 import com.yes.glowpick.databinding.ListItemProductBinding
 import com.yes.glowpick.model.Product
@@ -83,7 +87,8 @@ class ProductsAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     fun addItems(addItemList:List<Product>) {
         Log.i("productsAdapter", "addItems")
         val positionStart = products.size
-        products.addAll(addItemList)
+        products.addAll(addItemList.subList(positionStart, addItemList.size))
+
         Log.i("productsAdapter", "product item count ${products.count()}")
         notifyItemRangeInserted(positionStart, addItemList.size)
     }
@@ -91,6 +96,25 @@ class ProductsAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     class ProductViewHolder(
         private val binding: ListItemProductBinding
     ) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.setClickListener {
+                binding.product?.let { product ->
+                    navigateToProduct(product, it)
+                }
+            }
+        }
+
+        private fun navigateToProduct(
+            product: Product,
+            view: View
+        ) {
+            val direction =
+                HomeFragmentDirections.actionHomeFragmentToProductDetailFragment(
+                    product.imageUrl,
+                    product.productTitle
+                )
+            view.findNavController().navigate(direction)
+        }
 
         fun bind(item: Product) {
             binding.apply {

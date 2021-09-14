@@ -8,37 +8,39 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.yes.glowpick.R
 import com.yes.glowpick.databinding.FragmentProductDetailBinding
 
 class ProductDetailFragment : Fragment() {
 
-    private lateinit var productDetailViewModel: ProductDetailViewModel
-    private var _binding: FragmentProductDetailBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentProductDetailBinding
+    //private val args: ProductDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        productDetailViewModel =
-            ViewModelProvider(this).get(ProductDetailViewModel::class.java)
+    ): View {
 
-        _binding = FragmentProductDetailBinding.inflate(inflater, container, false)
+        binding = FragmentProductDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textProductDetail
-        productDetailViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
-    }
+        with(binding) {
+            // product image setting
+            Glide.with(root.context)
+                .load(arguments?.getString("imageUrl"))
+                .placeholder(R.drawable.ic_loading_icon)
+                .error(R.drawable.ic_error_cloud_icon)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(productDetailImage)
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+            // product name setting
+            productDetailName.text = arguments?.getString("name")
+        }
+
+        return root
     }
 }

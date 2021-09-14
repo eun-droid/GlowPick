@@ -18,8 +18,6 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
-
-
     </fragment>
 
     <fragment
@@ -29,7 +27,11 @@
         tools:layout="@layout/fragment_product_detail">
 
         <argument
-            android:name="plantId"
+            android:name="imageUrl"
+            app:argType="string" />
+
+        <argument
+            android:name="name"
             app:argType="string" />
 
     </fragment>

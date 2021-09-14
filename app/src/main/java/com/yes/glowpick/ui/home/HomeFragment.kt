@@ -16,6 +16,7 @@ class HomeFragment : Fragment() {
 
     private val homeViewModel by lazy { ViewModelProvider(this).get(HomeViewModel::class.java) }
     private lateinit var binding: FragmentHomeBinding
+    private var listPositionState = RecyclerView.NO_POSITION    // 복원을 위한 리스트 위치값 상태 저장
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +32,7 @@ class HomeFragment : Fragment() {
 
             with(productList) {
                 adapter = ProductsAdapter()
+
                 addItemDecoration(DividerItemDecoration(this.context, VERTICAL))
 
                 addOnScrollListener(object: RecyclerView.OnScrollListener() {
@@ -53,9 +55,20 @@ class HomeFragment : Fragment() {
             }
         }
 
-        // initial
-        homeViewModel.getProductList()
-
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (listPositionState != RecyclerView.NO_POSITION) {
+            binding.productList.scrollToPosition(listPositionState)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        listPositionState = (binding.productList.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
     }
 }
