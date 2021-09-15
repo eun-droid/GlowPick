@@ -1,4 +1,4 @@
-package com.yes.glowpick.model
+package com.yes.glowpick.model.product
 
 data class ProductResponse (
     val products: ArrayList<Product>

@@ -1,7 +1,7 @@
 package com.yes.glowpick
 
-import com.yes.glowpick.model.Product
-import com.yes.glowpick.model.ProductResponse
+import com.yes.glowpick.model.product.ProductResponse
+import com.yes.glowpick.model.recommend.RecommendProduct
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -16,6 +16,9 @@ interface GlowPickAPI {
     fun getProducts(
         @Path("pageNumber") pageNumber: Int
     ): Call<ProductResponse>
+
+    @GET("recommend_product.json")
+    fun getRecommends() : Call<Map<String, ArrayList<RecommendProduct>>>
 
     companion object {
         private const val BASE_URL = "https://s3.ap-northeast-2.amazonaws.com/public.glowday.com/test/app/"

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="product"
-            type="com.yes.glowpick.model.Product" />
+            type="com.yes.glowpick.model.product.Product" />
 
         <variable
             name="clickListener"

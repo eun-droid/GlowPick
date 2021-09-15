@@ -9,23 +9,32 @@ import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_SHORT
 import com.google.android.material.snackbar.Snackbar
 import com.yes.glowpick.R
-import com.yes.glowpick.model.Product
+import com.yes.glowpick.model.ViewItem
+import com.yes.glowpick.model.recommend.RecommendProduct
+import com.yes.glowpick.util.Event
 import java.text.DecimalFormat
 
 /**
  * Contains [BindingAdapter]s for the [HomeFragment] list.
  */
 
-@BindingAdapter("productItems")
-fun setProductItems(recyclerView: RecyclerView, items: ArrayList<Product>?) {
-    if (items != null) {
+@BindingAdapter("viewItems")
+fun setViewItems(recyclerView: RecyclerView, viewItems: ArrayList<ViewItem>?) {
+    if (viewItems != null) {
         val productsAdapter = recyclerView.adapter as ProductsAdapter
-
-        productsAdapter.hideLoading()
-
         val startPosition = productsAdapter.itemCount
-        productsAdapter.addItems(items)
-        recyclerView.smoothScrollToPosition(startPosition)
+
+        if (productsAdapter.addItems(viewItems)) {
+            recyclerView.smoothScrollToPosition(startPosition)
+        }
+    }
+}
+
+@BindingAdapter("recommendItems")
+fun setRecommendItems(recyclerView: RecyclerView, recommendItems: ArrayList<RecommendProduct>?) {
+    if (recommendItems != null) {
+        val recommendsAdapter = recyclerView.adapter as RecommendsAdapter
+        recommendsAdapter.submitList(recommendItems)
     }
 }
 
@@ -62,23 +71,27 @@ fun setReviewCount(textView: TextView, reviewCountString: String) {
 }
 
 @BindingAdapter("errorMessage")
-fun setErrorMessage(textView: TextView, errorMessage: String?) {
+fun setErrorMessage(textView: TextView, errorMessage: Event<String>?) {
     if (errorMessage != null) {
-        if (errorMessage.isEmpty()) {
-            textView.setText(R.string.default_error_message)
-        } else {
-            textView.text = errorMessage
+        errorMessage.getContentIfNotHandled()?.let {
+            if (it.isEmpty()) {
+                textView.setText(R.string.default_error_message)
+            } else {
+                textView.text = it
+            }
         }
     }
 }
 
 @BindingAdapter("showSnackBar")
-fun showSnackBar(view: View, snackBarMessage: String?) {
+fun showSnackBar(view: View, snackBarMessage: Event<String>?) {
     if (snackBarMessage != null) {
-        if (snackBarMessage.isEmpty()) {
-            Snackbar.make(view, R.string.default_error_message, LENGTH_SHORT).show()
-        } else {
-            Snackbar.make(view, snackBarMessage, LENGTH_SHORT).show()
+        snackBarMessage.getContentIfNotHandled()?.let {
+            if (it.isEmpty()) {
+                Snackbar.make(view, R.string.default_error_message, LENGTH_SHORT).show()
+            } else {
+                Snackbar.make(view, it, LENGTH_SHORT).show()
+            }
         }
     }
 }
