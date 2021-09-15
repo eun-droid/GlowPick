@@ -18,11 +18,14 @@ import com.yes.glowpick.util.HorizontalItemDecorator
 import java.lang.ref.WeakReference
 import kotlin.collections.ArrayList
 
+/**
+ * Adapter for Product RecyclerView
+ */
 class ProductsAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: ArrayList<ViewItem> = arrayListOf()
-    private val layoutManagerStates = hashMapOf<Int, Parcelable?>()
-    private val visibleScrollableViews = hashMapOf<Int, ViewHolderRef>()
+    private val layoutManagerStates = hashMapOf<Int, Parcelable?>()         // 중첩 리사이클러뷰 layoutManager state 보관
+    private val visibleScrollableViews = hashMapOf<Int, ViewHolderRef>()    // 중첩 리사이클러뷰 ViewHolder reference 보관
 
     private var _isShowLoading = false
     val isShowLoading: Boolean
@@ -111,6 +114,9 @@ class ProductsAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return items.size
     }
 
+    /**
+     * Loading view를 아이템리스트에 추가해 보여준다
+     */
     fun showLoading() {
         if (!_isShowLoading) {
             _isShowLoading = true
@@ -119,6 +125,9 @@ class ProductsAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
+    /**
+     * Loading view를 아이템리스트에서 제거해 숨긴다
+     */
     fun hideLoading() {
         if (_isShowLoading) {
             _isShowLoading = false
@@ -135,7 +144,7 @@ class ProductsAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         val addList = viewItems.subList(positionStart, viewItemSize)
         if (addList.isNotEmpty()) {
-            saveState()
+            saveState() // 아이템을 추가할 때 중첩 리사이클러뷰의 상태를 저장
 
             items.addAll(addList)
             notifyItemRangeInserted(positionStart, viewItemSize)
@@ -146,6 +155,9 @@ class ProductsAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return added
     }
 
+    /**
+     * 따로 보관해둔 중첩 리사이클러뷰 reference를 참고해 layoutManager State를 저장한다
+     */
     fun saveState() {
         visibleScrollableViews.values.forEach { item ->
             item.reference.get()?.let {

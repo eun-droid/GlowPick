@@ -51,6 +51,7 @@ class HomeFragment : Fragment() {
                                 (productList.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
                             val endItemPosition = productList.adapter?.itemCount?.minus(1)
 
+                            // 스크롤이 리스트 마지막 아이템까지 도달하면
                             if (lastVisibleItemPosition == endItemPosition) {
                                 val productsAdapter = recyclerView.adapter as ProductsAdapter
                                 if (!productsAdapter.isShowLoading) {
@@ -68,6 +69,6 @@ class HomeFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        productsAdapter?.saveState()
+        productsAdapter?.saveState()    // 중첩 리사이클러뷰 상태 저장
     }
 }

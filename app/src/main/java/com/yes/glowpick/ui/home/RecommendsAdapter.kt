@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yes.glowpick.databinding.ListItemRecommendBinding
 import com.yes.glowpick.model.recommend.RecommendProduct
 
+/**
+ * Adapter for Recommend Product RecyclerView
+ */
 class RecommendsAdapter: ListAdapter<RecommendProduct, RecyclerView.ViewHolder>(RecommendProductDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return RecommendViewHolder(
